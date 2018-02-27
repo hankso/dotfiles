@@ -345,108 +345,108 @@ endfunc
 "插件管理工具 vundle - Vim bundle
 "https://github.com/VundleVim/Vundle.vim
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-filetype off "必须的,可以完成vundle配置后再恢复
-
-"也可以不用设置runtimepath,直接使用call vundle#begin('~/.vim/bundle/Vundle.vim')
-"但是有的机子上不成,而且vundle更新后新版和旧版有些函数不同名了,最好按github上vundle项目仓库里写的步骤来,注意windows上别用'~'
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-"第一个管理的插件,就是它自己
-Plugin 'VundleVim/Vundle.vim'
-
-"快速易用的多文件查找替换,对vim的vimgrep等命令也进行了封装,用着简单
-Plugin 'dkprice/vim-easygrep'
-
-"颜色搭配相对好一点的一个jsonify插件
-Plugin 'elzr/vim-json'
-
-"各种配色方案,颜控必备:'I'm a slave to aesthetics. If you are too, I hope this helps.'
-Plugin 'flazz/vim-colorschemes'
-
-"""多用户同时编辑一个文件,不同用户不同色光标,社交之心呀
-""Plugin 'FredKSchott/CoVim'
-
-"与vim-markdown一起用的
-Plugin 'godlygeek/tabular'
-
-"自动补全文件
-Plugin 'honza/vim-snippets'
-
-"成对输入删除{[('"`的插件,用起来很人性化
-Plugin 'jiangmiao/auto-pairs'
-
-"""python自动补全
-""Plugin 'jedi-vim'
-
-""Plugin 'jlanzarotta/bufexplorer'
-
-""Plugin 'jsbeautify'
-""Plugin 'jslint.vim'
-
-""Plugin 'last_edit_marker.vim'
-
-"""statusline插件,华丽
-"Plugin 'Lokaltog/vim-powerline'
-
-"浏览标签的侧边栏,显示ctags产生的文件,跟taglist差不多,对中文支持好一点
-Plugin 'majutsushi/tagbar'
-
-"显示文件有改动增减的地方和行数,有点像git两个版本的文件比较
-Plugin 'mhinz/vim-signify'
-
-"git插件,支持git几乎所有命令,格式一般像这样:GitAdd GitPush GitLog
-Plugin 'motemen/git-vim'
-
-"js自动缩进和语法高亮
-Plugin 'pangloss/vim-javascript'
-
-"markdown高亮缩进以及一些有用的命令
-Plugin 'plasticboy/vim-markdown'
-
-"文件列表和加注释的快捷键
-Plugin 'scrooloose/nerdtree'
-Plugin 'scrooloose/nerdcommenter'
-
-"自动补全终极方案(ultimate solution),这是engine,可以与vim-snippets合作
-Plugin 'SirVer/ultisnips'
-
-"undo列表,在一小块buffer里显示像是git log那样的undo树状图
-Plugin 'sjl/gundo.vim'
-
-"Tim Pope(pathogen作者)写的一个git提供接口的插件
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-surround'
-
-"""快捷键显示quickfix list和location list
-""Plugin 'Valloric/ListToggle'
-"""自动补全引擎'ycmd'的一个for-vim的client(还有for-emacs的,for-atom的,for-nano的等等各种编辑器的client),使用前需要手动编译(不麻烦)
-""Plugin 'Valloric/YouCompleteMe'
-
-"漂亮的statusline
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-
-"这个插件功能可以说非常齐全了,补全缩进高亮等等等等,写python只需要它一个就够了
-Plugin 'vim-scripts/Python-mode-klen'
-
-"侧边显示代码结构树(类,函数,变量等)的插件,需要ctags,推荐使用上边的tagbar
-Plugin 'vim-scripts/taglist.vim'
-
-"基于vim的嵌入式中文输入法,不需要中英输入切换,似乎很方便,不过好像很久没有维护了?
-Plugin 'vim-scripts/VimIM'
-
-"QQ微信
-Plugin 'wsdjeg/vim-chat'
-
-"在vim内通过快捷键调用cscope
-Plugin 'cscope.vim'
-
-"使用特殊的符号显示缩进,比如'┆'
-Plugin 'Yggdroot/indentLine'
-
-call vundle#end()
-filetype plugin indent on
+" filetype off "必须的,可以完成vundle配置后再恢复
+"
+" "也可以不用设置runtimepath,直接使用call vundle#begin('~/.vim/bundle/Vundle.vim')
+" "但是有的机子上不成,而且vundle更新后新版和旧版有些函数不同名了,最好按github上vundle项目仓库里写的步骤来,注意windows上别用'~'
+" set rtp+=~/.vim/bundle/Vundle.vim
+" call vundle#begin()
+"
+" "第一个管理的插件,就是它自己
+" Plugin 'VundleVim/Vundle.vim'
+"
+" "快速易用的多文件查找替换,对vim的vimgrep等命令也进行了封装,用着简单
+" Plugin 'dkprice/vim-easygrep'
+"
+" "颜色搭配相对好一点的一个jsonify插件
+" Plugin 'elzr/vim-json'
+"
+" "各种配色方案,颜控必备:'I'm a slave to aesthetics. If you are too, I hope this helps.'
+" Plugin 'flazz/vim-colorschemes'
+"
+" """多用户同时编辑一个文件,不同用户不同色光标,社交之心呀
+" ""Plugin 'FredKSchott/CoVim'
+"
+" "与vim-markdown一起用的
+" Plugin 'godlygeek/tabular'
+"
+" "自动补全文件
+" Plugin 'honza/vim-snippets'
+"
+" "成对输入删除{[('"`的插件,用起来很人性化
+" Plugin 'jiangmiao/auto-pairs'
+"
+" """python自动补全
+" ""Plugin 'jedi-vim'
+"
+" ""Plugin 'jlanzarotta/bufexplorer'
+"
+" ""Plugin 'jsbeautify'
+" ""Plugin 'jslint.vim'
+"
+" ""Plugin 'last_edit_marker.vim'
+"
+" """statusline插件,华丽
+" "Plugin 'Lokaltog/vim-powerline'
+"
+" "浏览标签的侧边栏,显示ctags产生的文件,跟taglist差不多,对中文支持好一点
+" Plugin 'majutsushi/tagbar'
+"
+" "显示文件有改动增减的地方和行数,有点像git两个版本的文件比较
+" Plugin 'mhinz/vim-signify'
+"
+" "git插件,支持git几乎所有命令,格式一般像这样:GitAdd GitPush GitLog
+" Plugin 'motemen/git-vim'
+"
+" "js自动缩进和语法高亮
+" Plugin 'pangloss/vim-javascript'
+"
+" "markdown高亮缩进以及一些有用的命令
+" Plugin 'plasticboy/vim-markdown'
+"
+" "文件列表和加注释的快捷键
+" Plugin 'scrooloose/nerdtree'
+" Plugin 'scrooloose/nerdcommenter'
+"
+" "自动补全终极方案(ultimate solution),这是engine,可以与vim-snippets合作
+" Plugin 'SirVer/ultisnips'
+"
+" "undo列表,在一小块buffer里显示像是git log那样的undo树状图
+" Plugin 'sjl/gundo.vim'
+"
+" "Tim Pope(pathogen作者)写的一个git提供接口的插件
+" Plugin 'tpope/vim-fugitive'
+" Plugin 'tpope/vim-surround'
+"
+" """快捷键显示quickfix list和location list
+" ""Plugin 'Valloric/ListToggle'
+" """自动补全引擎'ycmd'的一个for-vim的client(还有for-emacs的,for-atom的,for-nano的等等各种编辑器的client),使用前需要手动编译(不麻烦)
+" ""Plugin 'Valloric/YouCompleteMe'
+"
+" "漂亮的statusline
+" Plugin 'vim-airline/vim-airline'
+" Plugin 'vim-airline/vim-airline-themes'
+"
+" "这个插件功能可以说非常齐全了,补全缩进高亮等等等等,写python只需要它一个就够了
+" Plugin 'vim-scripts/Python-mode-klen'
+"
+" "侧边显示代码结构树(类,函数,变量等)的插件,需要ctags,推荐使用上边的tagbar
+" Plugin 'vim-scripts/taglist.vim'
+"
+" "基于vim的嵌入式中文输入法,不需要中英输入切换,似乎很方便,不过好像很久没有维护了?
+" Plugin 'vim-scripts/VimIM'
+"
+" "QQ微信
+" Plugin 'wsdjeg/vim-chat'
+"
+" "在vim内通过快捷键调用cscope
+" Plugin 'cscope.vim'
+"
+" "使用特殊的符号显示缩进,比如'┆'
+" Plugin 'Yggdroot/indentLine'
+"
+" call vundle#end()
+" filetype plugin indent on
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -462,88 +462,89 @@ filetype plugin indent on
 "let Tlist_Sort_Type = "name"       "按照名称排序
 ""let Tlist_WinHeight = 100          "设置窗口高度
 "let Tlist_WinWidth = 30            "设置窗口宽度
-let g:tagbar_ctags_bin = 'ctags'   "ctags程序的路径
-let g:tagbar_width = 30            "窗口宽度的设置
 
-let NERDTreeWinSize = 26
-"let g:NERDTreeStatusline = 
-let NERDTreeWinPos = "left"
-
-let g:NERDSpaceDelims = 1          "注释符号后加空格
-let g:NERDCompactSexyComs = 1      "多行注释时结构更加紧凑
-let g:NERDDefaultAlign = 'left'    "多行注释在同一列添加注释符号
-"let g:NERDCustomDelimiters = {'c':{'left':'/**','right': '*/'}} "可以自己定义注释符号
-let g:NERDCommentEmptyLines = 1    "允许注释空行,默认否
-let g:NERDTrimTrailingWhitespace = 1 "取消注释时删除不必要的空格
-let g:vim_json_syntax_conceal = 0  
-let g:UltiSnipsExpandTrigger = "<tab>"
-let g:indentLine_char = '┊'
-" let g:indentLine_char = '|'
-
-let g:jedi#auto_initialization = 1
-let g:jedi#use_tabs_not_buffers = 1
-let g:jedi#show_call_signatures = "2"
-let g:jedi#completions_enabled = 1
-let g:jedi#goto_command = "<leader>d"
-let g:jedi#goto_assignments_command = "<leader>g"
-let g:jedi#goto_definitions_command = ""
-let g:jedi#documentation_command = "K"
-let g:jedi#usages_command = "<leader>n"
-let g:jedi#completions_command = "<C-Space>"
-let g:jedi#rename_command = "<leader>r"
-let g:vim_markdown_frontmatter = 1
-let g:vim_markdown_toml_frontmatter = 1
-let g:vim_markdown_json_frontmatter = 1
-let g:vim_markdown_no_extensions_in_markdown = 1
-let g:javascript_plugin_jsdoc = 1
-
-let g:airline_powerline_fonts = 1
-let g:airline_theme = 'bubblegum'
-let g:airline#extensions#whitespace#enabled = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#buffer_min_count = 1
-let g:airline#extensions#tabline#buffer_nr_show = 1
-let g:airline#extensions#tabline#buffer_nr_format = '[%s]'
-let g:airline#extensions#tabline#buffers_label = '[b]'
-let g:airline#extensions#tabline#tabs_label = '[t]'
-let g:airline#extensions#tabline#left_sep = ''
-let g:airline#extensions#tabline#right_sep = ''
-let g:airline#extensions#tagbar#enabled = 1
-let g:airline#extensions#fugitiveline#enabled = 1
-let g:airline_section_b = '%-0.10{getcwd()}'
-let g:airline_section_z = '%3p%%%#__accent_bold#%4l,%3v %{g:airline_symbols.maxlinenr}%:%L%#__restore__#'
-let g:airline_section_warning = ''
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
-" let g:airline_left_sep = '»'
-let g:airline_left_sep = '▶'
-" let g:airline_left_sep = ''
-" let g:airline_left_alt_sep = ''
-let g:airline_left_alt_sep = '>'
-" let g:airline_right_sep = '«'
-let g:airline_right_sep = '◀'
-" let g:airline_right_sep = ''
-" let g:airline_right_alt_sep = ''
-let g:airline_right_alt_sep = '<'
-" let g:airline_symbols.crypt = '🔒'
-let g:airline_symbols.readonly = '🔒'
-" let g:airline_symbols.readonly = ''
-" let g:airline_symbols.linenr = '☰'
-let g:airline_symbols.linenr = '␊'
-" let g:airline_symbols.linenr = '␤'
-" let g:airline_symbols.linenr = '¶'
-let g:airline_symbols.maxlinenr = '㏑'
-" let g:airline_symbols.maxlinenr = ' ␤'
-" let g:airline_symbols.maxlinenr = ''
-let g:airline_symbols.branch = '⎇'
-" let g:airline_symbols.branch = ''
-let g:airline_symbols.paste = 'ρ'
-" let g:airline_symbols.paste = 'Þ'
-" let g:airline_symbols.paste = '∥'
-let g:airline_symbols.spell = 'Ꞩ'
-let g:airline_symbols.notexists = '∄'
-let g:airline_symbols.whitespace = 'Ξ'
+" let g:tagbar_ctags_bin = 'ctags'   "ctags程序的路径
+" let g:tagbar_width = 30            "窗口宽度的设置
+"
+" let NERDTreeWinSize = 26
+" "let g:NERDTreeStatusline =
+" let NERDTreeWinPos = "left"
+"
+" let g:NERDSpaceDelims = 1          "注释符号后加空格
+" let g:NERDCompactSexyComs = 1      "多行注释时结构更加紧凑
+" let g:NERDDefaultAlign = 'left'    "多行注释在同一列添加注释符号
+" "let g:NERDCustomDelimiters = {'c':{'left':'/**','right': '*/'}} "可以自己定义注释符号
+" let g:NERDCommentEmptyLines = 1    "允许注释空行,默认否
+" let g:NERDTrimTrailingWhitespace = 1 "取消注释时删除不必要的空格
+" let g:vim_json_syntax_conceal = 0
+" let g:UltiSnipsExpandTrigger = "<tab>"
+" let g:indentLine_char = '┊'
+" " let g:indentLine_char = '|'
+"
+" let g:jedi#auto_initialization = 1
+" let g:jedi#use_tabs_not_buffers = 1
+" let g:jedi#show_call_signatures = "2"
+" let g:jedi#completions_enabled = 1
+" let g:jedi#goto_command = "<leader>d"
+" let g:jedi#goto_assignments_command = "<leader>g"
+" let g:jedi#goto_definitions_command = ""
+" let g:jedi#documentation_command = "K"
+" let g:jedi#usages_command = "<leader>n"
+" let g:jedi#completions_command = "<C-Space>"
+" let g:jedi#rename_command = "<leader>r"
+" let g:vim_markdown_frontmatter = 1
+" let g:vim_markdown_toml_frontmatter = 1
+" let g:vim_markdown_json_frontmatter = 1
+" let g:vim_markdown_no_extensions_in_markdown = 1
+" let g:javascript_plugin_jsdoc = 1
+"
+" let g:airline_powerline_fonts = 1
+" let g:airline_theme = 'bubblegum'
+" let g:airline#extensions#whitespace#enabled = 1
+" let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#buffer_min_count = 1
+" let g:airline#extensions#tabline#buffer_nr_show = 1
+" let g:airline#extensions#tabline#buffer_nr_format = '[%s]'
+" let g:airline#extensions#tabline#buffers_label = '[b]'
+" let g:airline#extensions#tabline#tabs_label = '[t]'
+" let g:airline#extensions#tabline#left_sep = ''
+" let g:airline#extensions#tabline#right_sep = ''
+" let g:airline#extensions#tagbar#enabled = 1
+" let g:airline#extensions#fugitiveline#enabled = 1
+" let g:airline_section_b = '%-0.10{getcwd()}'
+" let g:airline_section_z = '%3p%%%#__accent_bold#%4l,%3v %{g:airline_symbols.maxlinenr}%:%L%#__restore__#'
+" let g:airline_section_warning = ''
+" if !exists('g:airline_symbols')
+"     let g:airline_symbols = {}
+" endif
+" " let g:airline_left_sep = '»'
+" let g:airline_left_sep = '▶'
+" " let g:airline_left_sep = ''
+" " let g:airline_left_alt_sep = ''
+" let g:airline_left_alt_sep = '>'
+" " let g:airline_right_sep = '«'
+" let g:airline_right_sep = '◀'
+" " let g:airline_right_sep = ''
+" " let g:airline_right_alt_sep = ''
+" let g:airline_right_alt_sep = '<'
+" " let g:airline_symbols.crypt = '🔒'
+" let g:airline_symbols.readonly = '🔒'
+" " let g:airline_symbols.readonly = ''
+" " let g:airline_symbols.linenr = '☰'
+" let g:airline_symbols.linenr = '␊'
+" " let g:airline_symbols.linenr = '␤'
+" " let g:airline_symbols.linenr = '¶'
+" let g:airline_symbols.maxlinenr = '㏑'
+" " let g:airline_symbols.maxlinenr = ' ␤'
+" " let g:airline_symbols.maxlinenr = ''
+" let g:airline_symbols.branch = '⎇'
+" " let g:airline_symbols.branch = ''
+" let g:airline_symbols.paste = 'ρ'
+" " let g:airline_symbols.paste = 'Þ'
+" " let g:airline_symbols.paste = '∥'
+" let g:airline_symbols.spell = 'Ꞩ'
+" let g:airline_symbols.notexists = '∄'
+" let g:airline_symbols.whitespace = 'Ξ'
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -559,15 +560,15 @@ highlight mygroup6 cterm=none ctermfg=246 ctermbg=237
 highlight mygroup7 cterm=none ctermfg=249 ctermbg=238
 highlight mygroup8 cterm=none ctermfg=250 ctermbg=239
 
-"set statusline =%#mygroup1#[%n]%*             "bufferNumber
-"set statusline+=%#mygroup2#%F%*               "Fullpath
-"set statusline+=%#mygroup3#%m%r%*             "Modified|Read-only
-"set statusline+=%#mygroup4#%y%*               "filetYpe
-"set statusline+=%#mygroup5#\ %{Fsize(@%)}\ %* "file size
-"set statusline+=%#mygroup6#%=%*               "left-right-seperator
-"set statusline+=%#mygroup7#\ %(%l,%v%)%*      "left-aligned-7-len(line,column)
-"set statusline+=%#mygroup7#\ %p%%\ %*         "percentage
-"set statusline+=%#mygroup8#%{strftime(\"%y/%m/%d-%H:%M\")}%* "year-month-day-hour-minute
+set statusline =%#mygroup1#[%n]%*             "bufferNumber
+set statusline+=%#mygroup2#%F%*               "Fullpath
+set statusline+=%#mygroup3#%m%r%*             "Modified|Read-only
+set statusline+=%#mygroup4#%y%*               "filetYpe
+set statusline+=%#mygroup5#\ %{Fsize(@%)}\ %* "file size
+set statusline+=%#mygroup6#%=%*               "left-right-seperator
+set statusline+=%#mygroup7#\ %(%l,%v%)%*      "left-aligned-7-len(line,column)
+set statusline+=%#mygroup7#\ %p%%\ %*         "percentage
+set statusline+=%#mygroup8#%{strftime(\"%y/%m/%d-%H:%M\")}%* "year-month-day-hour-minute
 
 "借鉴网上一个函数
 function! Fsize(f)
