@@ -87,9 +87,13 @@ alias ll='ls -alF'
 alias lh='ls -alh'
 alias la='ls -A'
 alias l='ls -lh'
+alias tree='tree -ACh'
 
 # some df aliases
 alias df='df -lhT'
+
+# some du aliases
+alias du='du -sch '
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -174,16 +178,4 @@ xterm*|rxvt*)
     ;;
 esac
 
-
-export SC2PATH=$HOME/programs/StarCraftII
-export PATH=$PATH:/home/hank/working/embedded/gcc-linaro-7.2.1-2017.11-x86_64_aarch64-linux-gnu/bin
-export PATH=$PATH:/home/hank/working/embedded/gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabihf/bin
-export PATH=$PATH:/home/hank/working/embedded/sunxi-tools
-
 alias ipy="ipython"
-alias to="todolist"
-alias due="todolist l"
-alias cnpm="npm --registry=https://registry.npm.taobao.org \
-            --cache=$HOME/.npm/.cache/cnpm \
-            --disturl=https://npm.taobao.org/dist \
-            --userconfig=$HOME/.cnpmrc"
