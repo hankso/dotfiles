@@ -92,8 +92,11 @@ alias tree='tree -ACh'
 # some df aliases
 alias df='df -lhT'
 
-# some du aliases
+# disk usage
 alias du='du -sch '
+
+# memory usage
+alias free='free -lht'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
