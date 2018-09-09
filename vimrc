@@ -435,16 +435,16 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'vim-scripts/Python-mode-klen'
 
 "侧边显示代码结构树(类,函数,变量等)的插件,需要ctags,推荐使用上边的tagbar
-Plugin 'vim-scripts/taglist.vim'
+" Plugin 'vim-scripts/taglist.vim'
 
 "基于vim的嵌入式中文输入法,不需要中英输入切换,似乎很方便,不过好像很久没有维护了?
-Plugin 'vim-scripts/VimIM'
+" Plugin 'vim-scripts/VimIM'
 
 "QQ微信
-Plugin 'wsdjeg/vim-chat'
+" Plugin 'wsdjeg/vim-chat'
 
 "在vim内通过快捷键调用cscope
-Plugin 'cscope.vim'
+" Plugin 'cscope.vim'
 
 "使用特殊的符号显示缩进,比如'┆'
 Plugin 'Yggdroot/indentLine'
