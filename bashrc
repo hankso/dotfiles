@@ -77,6 +77,7 @@ if [ -x /usr/bin/dircolors ]; then
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
+    alias ip='ip -color'
 fi
 
 # colored GCC warnings and errors
@@ -89,14 +90,14 @@ alias la='ls -A'
 alias l='ls -lh'
 alias tree='tree -ACh'
 
+# memory usage
+alias free='free -lht'
+
 # some df aliases
 alias df='df -lhT'
 
-# disk usage
+# some du aliases
 alias du='du -sch '
-
-# memory usage
-alias free='free -lht'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert

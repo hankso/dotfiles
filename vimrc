@@ -40,7 +40,7 @@ set fillchars=vert:\ ,stl:\ ,stlnc:\ "在被分割的窗口间显示空白，便
 set formatoptions+=mB
 set foldenable         "开启折叠功能
 set foldlevel=1        "低于该等级的折叠自动打开
-set foldmethod=manual  "手动折叠
+set foldmethod=manual  "手动折叠manual | 格式syntax
 "set guifont=Courier_New:h10:cANSI "设置字体
 set guioptions-=T      "gvim隐藏工具栏
 set guioptions-=m      "gvim隐藏菜单栏
@@ -54,6 +54,7 @@ set langmenu=zh_CN.UTF-8 "语言设置
 set laststatus=2       "状态行启动显示:1,总是显示:2
 set linebreak          "在breakat规定的符号处折行
 set matchtime=1        "匹配括号高亮的时间(单位是十分之一秒)
+set modeline           "开启modeline功能,即文本内控制vim参数的magic
 set mouse=a            "可以在任意处使用鼠标
 set mousemodel=popup_setpos "鼠标右键位置弹出菜单
 set nocompatible       "不兼容vi的特性(默认开启,如果习惯用vi就关闭)
@@ -222,21 +223,21 @@ nmap <leader><right> :bn<CR>
 " 通过cscope交互式查找当前词
 nmap <leader>fa :call cscope#findInteractive(expand('<cword>'))<CR>
 " s: Find this C symbol
-nmap  <leader>fs :call cscope#find('s', expand('<cword>'))<CR>
+nmap <leader>fs :call cscope#find('s', expand('<cword>'))<CR>
 " g: Find this definition
-nmap  <leader>fg :call cscope#find('g', expand('<cword>'))<CR>
+nmap <leader>fg :call cscope#find('g', expand('<cword>'))<CR>
 " d: Find functions called by this function
-nmap  <leader>fd :call cscope#find('d', expand('<cword>'))<CR>
+nmap <leader>fd :call cscope#find('d', expand('<cword>'))<CR>
 " c: Find functions calling this function
-nmap  <leader>fc :call cscope#find('c', expand('<cword>'))<CR>
+nmap <leader>fc :call cscope#find('c', expand('<cword>'))<CR>
 " t: Find this text string
-nmap  <leader>ft :call cscope#find('t', expand('<cword>'))<CR>
+nmap <leader>ft :call cscope#find('t', expand('<cword>'))<CR>
 " e: Find this egrep pattern
-nmap  <leader>fe :call cscope#find('e', expand('<cword>'))<CR>
+nmap <leader>fe :call cscope#find('e', expand('<cword>'))<CR>
 " f: Find this file
-nmap  <leader>ff :call cscope#find('f', expand('<cword>'))<CR>
+nmap <leader>ff :call cscope#find('f', expand('<cword>'))<CR>
 " i: Find files #including this file
-nmap  <leader>fi :call cscope#find('i', expand('<cword>'))<CR>
+nmap <leader>fi :call cscope#find('i', expand('<cword>'))<CR>
 
 
 
@@ -344,6 +345,20 @@ endfunc
 
 "map <F9> <Esc>:Tlist<CR>
 
+"modeline -- vim magic
+"生成一行vim显示文件的参数，可覆盖vimrc中的设置
+"比如 vim: set ts=4 sw=4 tw=100 :
+nnoremap <silent> <leader>ml :call AppendModeline()<CR>
+func! AppendModeline()
+    let l:modeline = substitute(
+        \ &commentstring, "%s", 
+        \ printf(" vim: set ts=%d sw=%d tw=%d %set ft=%s :",
+            \ &tabstop, &shiftwidth, &textwidth, 
+            \ &expandtab ? '' : 'no', &filetype),
+        \ "")
+    call append(line("$"), l:modeline)
+endfunc
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "插件管理工具 vundle - Vim bundle
@@ -360,7 +375,7 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 "快速易用的多文件查找替换,对vim的vimgrep等命令也进行了封装,用着简单
-Plugin 'dkprice/vim-easygrep'
+" Plugin 'dkprice/vim-easygrep'
 
 "颜色搭配相对好一点的一个jsonify插件
 Plugin 'elzr/vim-json'
@@ -368,29 +383,26 @@ Plugin 'elzr/vim-json'
 "各种配色方案,颜控必备:'I'm a slave to aesthetics. If you are too, I hope this helps.'
 Plugin 'flazz/vim-colorschemes'
 
-"""多用户同时编辑一个文件,不同用户不同色光标,社交之心呀
-""Plugin 'FredKSchott/CoVim'
-
 "与vim-markdown一起用的
 Plugin 'godlygeek/tabular'
 
-"自动补全文件
+"自动补全文件名和路径
 Plugin 'honza/vim-snippets'
 
 "成对输入删除{[('"`的插件,用起来很人性化
 Plugin 'jiangmiao/auto-pairs'
 
-"""python自动补全
-""Plugin 'jedi-vim'
+"python自动补全
+"Plugin 'jedi-vim'
 
-""Plugin 'jlanzarotta/bufexplorer'
+"Plugin 'jlanzarotta/bufexplorer'
 
-""Plugin 'jsbeautify'
-""Plugin 'jslint.vim'
+"Plugin 'jsbeautify'
+"Plugin 'jslint.vim'
 
-""Plugin 'last_edit_marker.vim'
+"Plugin 'last_edit_marker.vim'
 
-"""statusline插件,华丽
+"statusline插件,华丽
 "Plugin 'Lokaltog/vim-powerline'
 
 "浏览标签的侧边栏,显示ctags产生的文件,跟taglist差不多,对中文支持好一点
@@ -400,7 +412,7 @@ Plugin 'majutsushi/tagbar'
 Plugin 'mhinz/vim-signify'
 
 "git插件,支持git几乎所有命令,格式一般像这样:GitAdd GitPush GitLog
-Plugin 'motemen/git-vim'
+" Plugin 'motemen/git-vim'
 
 "js自动缩进和语法高亮
 Plugin 'pangloss/vim-javascript'
@@ -416,16 +428,16 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'SirVer/ultisnips'
 
 "undo列表,在一小块buffer里显示像是git log那样的undo树状图
-Plugin 'sjl/gundo.vim'
+" Plugin 'sjl/gundo.vim'
 
 "Tim Pope(pathogen作者)写的一个git提供接口的插件
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-surround'
+" Plugin 'tpope/vim-fugitive'
+" Plugin 'tpope/vim-surround'
 
-"""快捷键显示quickfix list和location list
-""Plugin 'Valloric/ListToggle'
-"""自动补全引擎'ycmd'的一个for-vim的client(还有for-emacs的,for-atom的,for-nano的等等各种编辑器的client),使用前需要手动编译(不麻烦)
-""Plugin 'Valloric/YouCompleteMe'
+""快捷键显示quickfix list和location list
+"Plugin 'Valloric/ListToggle'
+""自动补全引擎'ycmd'的一个for-vim的client(还有for-emacs的,for-atom的,for-nano的等等各种编辑器的client),使用前需要手动编译(不麻烦)
+"Plugin 'Valloric/YouCompleteMe'
 
 "漂亮的statusline
 Plugin 'vim-airline/vim-airline'
@@ -437,9 +449,6 @@ Plugin 'vim-scripts/Python-mode-klen'
 "侧边显示代码结构树(类,函数,变量等)的插件,需要ctags,推荐使用上边的tagbar
 " Plugin 'vim-scripts/taglist.vim'
 
-"基于vim的嵌入式中文输入法,不需要中英输入切换,似乎很方便,不过好像很久没有维护了?
-" Plugin 'vim-scripts/VimIM'
-
 "QQ微信
 " Plugin 'wsdjeg/vim-chat'
 
@@ -448,6 +457,9 @@ Plugin 'vim-scripts/Python-mode-klen'
 
 "使用特殊的符号显示缩进,比如'┆'
 Plugin 'Yggdroot/indentLine'
+
+"verilog语言的高亮、格式化等
+Plugin 'vhda/verilog_systemverilog.vim'
 
 call vundle#end()
 filetype plugin indent on
