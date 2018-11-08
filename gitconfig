@@ -1,0 +1,24 @@
+# This is Git's per-user configuration file.
+[user]
+# Please adapt and uncomment the following lines:
+	name = xxx
+	email = xxx
+
+[push]
+	default = simple
+
+[alias]
+	st = status
+
+    ch = checkout
+	
+    lg = log --color --all --decorate --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    
+    pack = "!\
+        mkdir -p dist && \
+        PNAME=`basename ${PWD}` && \
+        echo Using prefix ${PNAME} &&\
+        git archive \
+            --format=tar.gz \
+            --prefix=${PNAME}/ \
+            -v -9 -o dist/${1}.tar.gz"
