@@ -46,7 +46,6 @@ set guioptions-=T      "gvim隐藏工具栏
 set guioptions-=m      "gvim隐藏菜单栏
 set helplang=cn        "优先查询中文帮助文档
 set history=100        "输入历史记录数
-set hlsearch           "搜索结果高亮
 set ignorecase         "搜索忽略大小写
 set incsearch          "边输入边搜索"
 set iskeyword+=.,_,$,@,%,#,- "带有如下符号的单词不折行
@@ -88,9 +87,10 @@ set wildmenu           "增强输入命令自动补全功能
 " au VimEnter * if !argc() | NERDTree | endif
 au BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 au BufWritePost ~/.vimrc source ~/.vimrc
-au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-" au BufWinLeave * mkview
-" au BufReadPost * silent loadview
+" au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+au BufWinLeave * mkview
+au BufReadPost * silent loadview
+au BufWritePost *.py call Flake8()
 
 au BufNewFile *.cpp,*.[ch],*.sh,*.rb,*.java,*.py,*.md execute ":call SetTitle()"
 au BufRead,BufNewFile *.txt set filetype=confluencewiki
@@ -112,20 +112,27 @@ au FileType javascript setlocal foldmethod=syntax
 au FileType python set omnifunc=pythoncomplete#Complete
 au FileType python set completeopt-=preview
 
+au cursorhold * set nohlsearch
+
 func! SetTitle()
     if &filetype == 'sh'
         call setline(1, "#!/bin/bash")
-        call append(line("."), "")
+        call append(line("."),   "# File: ".expand("%"))
+        call append(line(".")+1, "# Author: Hankso")
+        call append(line(".")+2, "# Webpage: http://github.com/hankso")
+        call append(line(".")+3, "# Time: ".strftime("%c"))
+        call append(line(".")+4, "")
     elseif &filetype == 'python'
         call setline(1, "#!/usr/bin/env python")
         call append(line("."),   "# coding=utf-8")
-        call append(line(".")+1, "'''")
-        call append(line(".")+2, "File: ".expand("%"))
-        call append(line(".")+3, "Author: Hankso")
-        call append(line(".")+4, "Web: http://github.com/hankso")
-        call append(line(".")+5, "Time: ".strftime("%c"))
-        call append(line(".")+6, "'''")
-        call append(line(".")+7, "")
+        call append(line(".")+1, "#")
+        call append(line(".")+2, "# File: ".expand("%"))
+        call append(line(".")+3, "# Author: Hankso")
+        call append(line(".")+4, "# Webpage: https://github.com/hankso")
+        call append(line(".")+5, "# Time: ".strftime("%c"))
+        call append(line(".")+6, "")
+        call append(line(".")+7, "'''__doc__'''")
+        call append(line(".")+8, "")
     elseif &filetype == 'ruby'
         call setline(1, "#!/usr/bin/env ruby")
         call append(line("."), "# encoding: utf-8")
@@ -133,16 +140,23 @@ func! SetTitle()
     elseif &filetype == 'mkd'
         call setline(1, "<head><meta charset=\"UTF-8\"></head>")
     elseif &filetype == 'java'
-        call setline(1, "public class ".expand("%:r"))
-        call append(line("."), "")
+        call setline(1, "//")
+        call append(line("."),   "// File: ".expand("%"))
+        call append(line(".")+1, "// Author: Hankso")
+        call append(line(".")+2, "// Webpage: http://github.com/hankso")
+        call append(line(".")+3, "// Time: ".strftime("%c"))
+        call append(line(".")+4, "//")
+        call append(line(".")+5, "")
+        call append(line(".")+6, "public class ".expand("%:r"))
+        call append(line(".")+7, "")
     elseif &filetype == 'c' || &filetype == 'cpp'
         call setline(1, "/*************************************************************************")
         call append(line("."),   "File: ".expand("%"))
         call append(line(".")+1, "Author: Hankso")
-        call append(line(".")+2, "Web: http://github.com/hankso")
+        call append(line(".")+2, "Webpage: http://github.com/hankso")
         call append(line(".")+3, "Time: ".strftime("%c"))
         call append(line(".")+4, "************************************************************************/")
-        call append(line(".")+5, "#include<stdio.h>")
+        call append(line(".")+5, "#include <stdio.h>")
         call append(line(".")+6, "")
     endif
 endfunc
@@ -166,20 +180,28 @@ augroup Json
     au Filetype json set foldmethod=syntax
 augroup END
 
+augroup Python
+    au!
+    au BufNewFile,BufRead *.py set tabstop=4 softtabstop=4 shiftwidth=4
+    au BufNewFile,BufRead *.py set textwidth=79
+    au BufNewFile,BufRead *.py set expandtab autoindent
+augroup END
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "快捷键
 "     COMMANDS                    MODES
-":map   :noremap  :unmap     Normal, Visual, Select, Operator-pending
-":nmap  :nmap     :nunmap    Normal
-":vmap  :vnoremap :vunmap    Visual and Select
-":smap  :snoremap :sunmap    Select
-":xmap  :xnoremap :xunmap    Visual
-":omap  :onoremap :ounmap    Operator-pending
-":map!  :noremap! :unmap!    Insert and Command-line
-":imap  :inoremap :iunmap    Insert
-":lmap  :lnoremap :lunmap    Insert, Command-line, Lang-Arg
-":cmap  :cnoremap :cunmap    Command-line
+"recursive no-recursove
+":map      :noremap     :unmap     Normal, Visual, Select, Operator-pending
+":nmap     :nmap        :nunmap    Normal
+":vmap     :vnoremap    :vunmap    Visual and Select
+":smap     :snoremap    :sunmap    Select
+":xmap     :xnoremap    :xunmap    Visual
+":omap     :onoremap    :ounmap    Operator-pending
+":map!     :noremap!    :unmap!    Insert and Command-line
+":imap     :inoremap    :iunmap    Insert
+":lmap     :lnoremap    :lunmap    Insert, Command-line, Lang-Arg
+":cmap     :cnoremap    :cunmap    Command-line
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let mapleader=','
 "普通|可视|选择模式
@@ -201,6 +223,12 @@ map <C-a> ggVG$
 map md :!~/.vim/markdown.pl % > %.html <CR><CR>
 " ,/ 调用NerdCommenter添加(取消)注释
 map <leader>/ <plug>NERDCommenterToggle
+" 自动开启搜索高亮
+noremap n :set hlsearch<CR>n
+noremap N :set hlsearch<CR>N
+noremap / :set hlsearch<CR>/
+noremap ? :set hlsearch<CR>?
+noremap * :set hlsearch<CR>*
 
 
 "仅普通模式
@@ -374,93 +402,117 @@ call vundle#begin()
 "第一个管理的插件,就是它自己
 Plugin 'VundleVim/Vundle.vim'
 
-"快速易用的多文件查找替换,对vim的vimgrep等命令也进行了封装,用着简单
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Utilities
+"
+"快速易用的多文件查找替换 对vim的vimgrep等命令也进行了封装
 " Plugin 'dkprice/vim-easygrep'
 
+"成对输入删除{[('"`的插件
+Plugin 'jiangmiao/auto-pairs'
+
+"支持Git几乎所有命令:GitAdd GitPush GitLog ...
+" Plugin 'motemen/git-vim'
+
+"多语言添加注释
+Plugin 'scrooloose/nerdcommenter'
+
+"许多有用的函数
+" Plugin 'vim-scripts/last_edit_marker.vim'
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+
+"QQ微信
+" Plugin 'wsdjeg/vim-chat'
+
+"自动补全
+" Plugin 'honza/vim-snippets'
+" Plugin 'garbas/vim-snipmate'
+
+"自动补全engine 可以与vim-snippets合作
+" Plugin 'SirVer/ultisnips'
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Languages
+"
 "颜色搭配相对好一点的一个jsonify插件
 Plugin 'elzr/vim-json'
 
-"各种配色方案,颜控必备:'I'm a slave to aesthetics. If you are too, I hope this helps.'
-Plugin 'flazz/vim-colorschemes'
-
-"与vim-markdown一起用的
-Plugin 'godlygeek/tabular'
-
-"自动补全文件名和路径
-Plugin 'honza/vim-snippets'
-
-"成对输入删除{[('"`的插件,用起来很人性化
-Plugin 'jiangmiao/auto-pairs'
-
-"python自动补全
-"Plugin 'jedi-vim'
-
-"Plugin 'jlanzarotta/bufexplorer'
-
-"Plugin 'jsbeautify'
-"Plugin 'jslint.vim'
-
-"Plugin 'last_edit_marker.vim'
-
-"statusline插件,华丽
-"Plugin 'Lokaltog/vim-powerline'
-
-"浏览标签的侧边栏,显示ctags产生的文件,跟taglist差不多,对中文支持好一点
-Plugin 'majutsushi/tagbar'
-
-"显示文件有改动增减的地方和行数,有点像git两个版本的文件比较
-Plugin 'mhinz/vim-signify'
-
-"git插件,支持git几乎所有命令,格式一般像这样:GitAdd GitPush GitLog
-" Plugin 'motemen/git-vim'
-
-"js自动缩进和语法高亮
+"JS自动缩进和语法高亮
 Plugin 'pangloss/vim-javascript'
+
+"JS代码格式
+" Plugin 'jsbeautify'
+
+"JS语法检查
+" Plugin 'jslint.vim'
 
 "markdown高亮缩进以及一些有用的命令
 Plugin 'plasticboy/vim-markdown'
 
-"文件列表和加注释的快捷键
-Plugin 'scrooloose/nerdtree'
-Plugin 'scrooloose/nerdcommenter'
+"与vim-markdown一起用的
+Plugin 'godlygeek/tabular'
 
-"自动补全终极方案(ultimate solution),这是engine,可以与vim-snippets合作
-Plugin 'SirVer/ultisnips'
+"python自动补全
+" Plugin 'jedi-vim'
 
-"undo列表,在一小块buffer里显示像是git log那样的undo树状图
-" Plugin 'sjl/gundo.vim'
+"Python代码PEP8格式检查
+Plugin 'nvie/vim-flake8'
 
-"Tim Pope(pathogen作者)写的一个git提供接口的插件
-" Plugin 'tpope/vim-fugitive'
-" Plugin 'tpope/vim-surround'
+"一个插件满足python所有需求 缩进高亮补全 ...
+"Make Vim a Python IDE
+Plugin 'python-mode/python-mode'
 
-""快捷键显示quickfix list和location list
+" Plugin 'vim-syntastic/syntastic'
+
+"verilog语言的高亮、格式化等
+Plugin 'vhda/verilog_systemverilog.vim'
+
+"go语言插件
+Plugin 'fatih/vim-go'
+
+"多语言自动补全
+" Plugin 'Valloric/YouCompleteMe'
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Display
+"
+"Vim 配色方案 颜控必备
+"I'm a slave to aesthetics. If you are too, I hope this helps.
+Plugin 'flazz/vim-colorschemes'
+
+"显示文件有改动增减的地方和行数
+" Plugin 'mhinz/vim-signify'
+
+"快捷键显示quickfix list和location list
 "Plugin 'Valloric/ListToggle'
-""自动补全引擎'ycmd'的一个for-vim的client(还有for-emacs的,for-atom的,for-nano的等等各种编辑器的client),使用前需要手动编译(不麻烦)
-"Plugin 'Valloric/YouCompleteMe'
+
+"侧边显示代码结构树(类,函数,变量等) 需要ctags 推荐使用tagbar
+" Plugin 'vim-scripts/taglist.vim'
+
+"显示undo列表 即操作历史
+Plugin 'sjl/gundo.vim'
+
+"显示文件列表
+Plugin 'scrooloose/nerdtree'
+
+"浏览标签的侧边栏 显示ctags产生的文件 跟taglist差不多,对中文支持好一点
+Plugin 'majutsushi/tagbar'
 
 "漂亮的statusline
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 
-"这个插件功能可以说非常齐全了,补全缩进高亮等等等等,写python只需要它一个就够了
-Plugin 'vim-scripts/Python-mode-klen'
-
-"侧边显示代码结构树(类,函数,变量等)的插件,需要ctags,推荐使用上边的tagbar
-" Plugin 'vim-scripts/taglist.vim'
-
-"QQ微信
-" Plugin 'wsdjeg/vim-chat'
-
-"在vim内通过快捷键调用cscope
-" Plugin 'cscope.vim'
+"statusline插件,华丽
+"Plugin 'Lokaltog/vim-powerline'
 
 "使用特殊的符号显示缩进,比如'┆'
 Plugin 'Yggdroot/indentLine'
 
-"verilog语言的高亮、格式化等
-Plugin 'vhda/verilog_systemverilog.vim'
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call vundle#end()
 filetype plugin indent on
 
@@ -468,17 +520,6 @@ filetype plugin indent on
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "设置插件的一些功能
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let Tlist_Auto_Open = 0
-let Tlist_Ctags_Cmd = 'ctags'      "如果ctags不在PATH中需要用全路径
-let Tlist_Compart_Format = 1       "压缩方式
-let Tlist_Enable_Fold_Column = 0   "不要显示折叠树
-let Tlist_Exit_OnlyWindow = 1      "taglist为最后一窗口时退出vim
-let Tlist_Use_Right_Window = 1     "右侧窗口显示
-let Tlist_Show_One_File = 1        "只显示当前文件的tag
-let Tlist_Sort_Type = "name"       "按照名称排序
-"let Tlist_WinHeight = 100          "设置窗口高度
-let Tlist_WinWidth = 30            "设置窗口宽度
-
  let g:tagbar_ctags_bin = 'ctags'   "ctags程序的路径
  let g:tagbar_width = 30            "窗口宽度的设置
 
@@ -492,26 +533,17 @@ let Tlist_WinWidth = 30            "设置窗口宽度
  "let g:NERDCustomDelimiters = {'c':{'left':'/**','right': '*/'}} "可以自己定义注释符号
  let g:NERDCommentEmptyLines = 1    "允许注释空行,默认否
  let g:NERDTrimTrailingWhitespace = 1 "取消注释时删除不必要的空格
+
  let g:vim_json_syntax_conceal = 0
- let g:UltiSnipsExpandTrigger = "<tab>"
+
  let g:indentLine_char = '┊'
  " let g:indentLine_char = '|'
 
- let g:jedi#auto_initialization = 1
- let g:jedi#use_tabs_not_buffers = 1
- let g:jedi#show_call_signatures = "2"
- let g:jedi#completions_enabled = 1
- let g:jedi#goto_command = "<leader>d"
- let g:jedi#goto_assignments_command = "<leader>g"
- let g:jedi#goto_definitions_command = ""
- let g:jedi#documentation_command = "K"
- let g:jedi#usages_command = "<leader>n"
- let g:jedi#completions_command = "<C-Space>"
- let g:jedi#rename_command = "<leader>r"
  let g:vim_markdown_frontmatter = 1
  let g:vim_markdown_toml_frontmatter = 1
  let g:vim_markdown_json_frontmatter = 1
  let g:vim_markdown_no_extensions_in_markdown = 1
+
  let g:javascript_plugin_jsdoc = 1
 
  let g:airline_powerline_fonts = 1
@@ -531,7 +563,7 @@ let Tlist_WinWidth = 30            "设置窗口宽度
  let g:airline_section_z = '%3p%%%#__accent_bold#%4l,%3v %{g:airline_symbols.maxlinenr}%:%L%#__restore__#'
  let g:airline_section_warning = ''
  if !exists('g:airline_symbols')
-     let g:airline_symbols = {}
+    let g:airline_symbols = {}
  endif
  " let g:airline_left_sep = '»'
  let g:airline_left_sep = '▶'
@@ -561,6 +593,8 @@ let Tlist_WinWidth = 30            "设置窗口宽度
  let g:airline_symbols.spell = 'Ꞩ'
  let g:airline_symbols.notexists = '∄'
  let g:airline_symbols.whitespace = 'Ξ'
+
+ let g:go_version_warning = 0
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
