@@ -103,6 +103,38 @@ _pip_completion()
 complete -o default -F _pip_completion pip
 # pip bash completion end
 
+# python virtualenv start
+activate()
+{
+    if [ -z "$1" ]; then
+        echo "No virtual environment name specified"
+        return
+    fi
+    target=`realpath ${VENV_ROOT} 2>/dev/null`/$1
+    script=`realpath $target`/bin/activate
+    if [ -d $target ]; then
+        if [ -f $script ]; then
+            deactivate 2>/dev/null
+            echo "Activating $script"
+            source $script
+        else
+            echo "Invalid environment path $target"
+        fi
+    else
+        echo "Cannot found environment $1"
+    fi
+}
+
+_activate_completions()
+{
+    if [ "${#COMP_WORDS[@]}" != "2" ]; then return; fi
+    COMPREPLY=(
+        $(compgen -W "$(ls ${VENV_ROOT})" -- "${COMP_WORDS[1]}")
+    )
+}
+complete -F _activate_completions activate
+# python virtualenv end
+
 # If this is an xterm set more declarative titles 
 # "dir: last_cmd" and "actual_cmd" during execution
 # If you want to exclude a cmd from being printed see line 156
@@ -161,3 +193,5 @@ xterm*|rxvt*)
 *)
     ;;
 esac
+
+export VENV_ROOT=$HOME/venv
