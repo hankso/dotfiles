@@ -12,6 +12,9 @@ case $- in
       *) return;;
 esac
 
+export PAGER='most'
+export EDITOR='nvim'
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
@@ -67,26 +70,8 @@ else
 fi
 unset color_prompt force_color_prompt
 
-# enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
-
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-    alias ip='ip -color'
-fi
-
 # colored GCC warnings and errors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
@@ -117,6 +102,38 @@ _pip_completion()
 }
 complete -o default -F _pip_completion pip
 # pip bash completion end
+
+# python virtualenv start
+activate()
+{
+    if [ -z "$1" ]; then
+        echo "No virtual environment name specified"
+        return
+    fi
+    target=`realpath ${VENV_ROOT} 2>/dev/null`/$1
+    script=`realpath $target`/bin/activate
+    if [ -d $target ]; then
+        if [ -f $script ]; then
+            deactivate 2>/dev/null
+            echo "Activating $script"
+            source $script
+        else
+            echo "Invalid environment path $target"
+        fi
+    else
+        echo "Cannot found environment $1"
+    fi
+}
+
+_activate_completions()
+{
+    if [ "${#COMP_WORDS[@]}" != "2" ]; then return; fi
+    COMPREPLY=(
+        $(compgen -W "$(ls ${VENV_ROOT})" -- "${COMP_WORDS[1]}")
+    )
+}
+complete -F _activate_completions activate
+# python virtualenv end
 
 # If this is an xterm set more declarative titles 
 # "dir: last_cmd" and "actual_cmd" during execution
@@ -177,23 +194,13 @@ xterm*|rxvt*)
     ;;
 esac
 
-# Load RVM into a shell session *as a function*
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
-# added by travis gem
-[ -f "$HOME/.travis/travis.sh" ] && source "$HOME/.travis/travis.sh"
-
 # user defined
-export UBUNTU_MENUPROXY=0
-export SC2PATH=$HOME/programs/StarCraftII
-export GOPATH=$HOME/Documents/go
+export GOPATH=$HOME/programs/go
 export NODE_PATH=$HOME/programs/node-linux-x64/lib/node_modules
+export VENV_ROOT=$HOME/venv
 
 # Espressif Development Framework
 export ESP_PATH=$HOME/programs/Espressif
 export IDF_PATH=$ESP_PATH/esp-idf  # IoT
 export ADF_PATH=$ESP_PATH/esp-adf  # Audio
 export MDF_PATH=$ESP_PATH/esp-mdf  # Mesh
-
-# export EMBCI_PATH=$HOME/Git/EmBCI
-# export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-

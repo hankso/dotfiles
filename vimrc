@@ -26,22 +26,21 @@ set autoread           "当打开的文件在vim外被其他编辑器改动时�
 set autowrite          "打开新buffer自动保存之前buffer内容
 set backspace=eol,indent,start "合理退格
 set backup             "自动备份文件
-set backupdir=~/.vim/dirs/backups "back文件所在处
+set backupdir=~/.vim/backups "back文件所在处
 "set cindent            "C语言自动缩进
 set cmdheight=1        "最下方命令行高度
 set completeopt=preview,menuone,noinsert "智能补全的选项,不立即插入,显示更多信息
 set confirm            "处理未保存或只读文件时弹出确认
-set cursorcolumn       "突出当前列
+"set cursorcolumn       "突出当前列
 set cursorline         "突出当前行
 set encoding=utf8      "编码格式
 set expandtab          "使用空格代替\t(使用`:retab!`将全文'\t'替换成' ')
 set fileencodings=utf8,ucs-bom,euc-cn,cp950
 set fillchars=vert:\ ,stl:\ ,stlnc:\ "在被分割的窗口间显示空白，便于阅读
 set formatoptions+=mB
-set foldenable         "开启折叠功能
-set foldlevel=99       "低于该等级的折叠自动打开
-set foldnestmax=2
-set foldmethod=indent  "手动折叠manual | 格式syntax
+set nofoldenable         "开启折叠功能
+set foldlevel=1        "低于该等级的折叠自动打开
+set foldmethod=manual  "手动折叠manual | 格式syntax
 "set guifont=Courier_New:h10:cANSI "设置字体
 set guioptions-=T      "gvim隐藏工具栏
 set guioptions-=m      "gvim隐藏菜单栏
@@ -118,27 +117,48 @@ func! SetCommentHeader()
     let AU = "Authors: Hank <hankso1106@gmail.com>"
     let CT = "Create: ".strftime("%Y-%m-%d %T")
     if &filetype == 'sh'
-        call append(0, ["#!/bin/bash", "# ".FN, "# ".AU, "# ".CT, ""])
+        call setline(1,          "#!/bin/bash")
+        call append(line("."),   "# File: ".expand("%"))
+        call append(line(".")+1, "# Author: Hankso")
+        call append(line(".")+2, "# Webpage: http://github.com/hankso")
+        call append(line(".")+3, "# Time: ".strftime("%c"))
+        call append(line(".")+4, "")
     elseif &filetype == 'python'
-        " PEP394 add shebang, PEP263 add encoding
-        call append(0, [
-            \ "#!/usr/bin/env python3",
-            \ "# coding=utf-8",
-            \ "#", "# ".FN, "# ".AU, "# ".CT, "",
-            \ "'''__doc__'''"])
+        call setline(1,          "#!/usr/bin/env python3")
+        call append(line("."),   "# coding=utf-8")
+        call append(line(".")+1, "#")
+        call append(line(".")+2, "# File: ".expand("%"))
+        call append(line(".")+3, "# Author: Hankso")
+        call append(line(".")+4, "# Webpage: https://github.com/hankso")
+        call append(line(".")+5, "# Time: ".strftime("%c"))
+        call append(line(".")+6, "")
+        call append(line(".")+7, "'''__doc__'''")
+        call append(line(".")+8, "")
     elseif &filetype == 'ruby'
-        call append(0, [
-            \ "#!/usr/bin/env ruby",
-            \ "# encoding: utf-8",
-            \ "#", "# ".FN, "# ".AU, "# ".CT, ""])
-    " elseif &filetype == 'mkd'
-    "     call setline(1, "<head><meta charset=\"UTF-8\"></head>")
+        call setline(1,        "#!/usr/bin/env ruby")
+        call append(line("."), "# encoding: utf-8")
+        call append(line(".")+1, "")
+    elseif &filetype == 'mkd'
+        call setline(1, "<head><meta charset=\"UTF-8\"></head>")
     elseif &filetype == 'java'
-        call append(0, ["/* ", " * ".FN, " * ".AU, " * ".CT, " */", ""])
-        call append(line("."), ["public class ".expand("%:r"), ""])
+        call setline(1,          "//")
+        call append(line("."),   "// File: ".expand("%"))
+        call append(line(".")+1, "// Author: Hankso")
+        call append(line(".")+2, "// Webpage: http://github.com/hankso")
+        call append(line(".")+3, "// Time: ".strftime("%c"))
+        call append(line(".")+4, "//")
+        call append(line(".")+5, "")
+        call append(line(".")+6, "public class ".expand("%:r"))
+        call append(line(".")+7, "")
     elseif &filetype == 'c' || &filetype == 'cpp'
-        call append(0, ["/* ", " * ".FN, " * ".AU, " * ".CT, " */", ""])
-        call append(line("."), ["#include <stdio.h>", ""])
+        call setline(1,          "/*")
+        call append(line("."),   " * File: ".expand("%"))
+        call append(line(".")+1, " * Author: Hankso")
+        call append(line(".")+2, " * Webpage: http://github.com/hankso")
+        call append(line(".")+3, " * Time: ".strftime("%c"))
+        call append(line(".")+4, " */")
+        call append(line(".")+5, "#include <stdio.h>")
+        call append(line(".")+6, "")
     endif
 endfunc
 
@@ -456,7 +476,7 @@ Plugin 'godlygeek/tabular'
 
 "一个插件满足python所有需求 缩进高亮补全 ...
 "Make Vim a Python IDE
-Plugin 'python-mode/python-mode'
+"Plugin 'python-mode/python-mode'
 
 "Python代码折叠
 Plugin 'tmhedberg/SimpylFold'
@@ -464,10 +484,10 @@ Plugin 'tmhedberg/SimpylFold'
 " Plugin 'vim-syntastic/syntastic'
 
 "verilog语言的高亮、格式化等
-Plugin 'vhda/verilog_systemverilog.vim'
+"Plugin 'vhda/verilog_systemverilog.vim'
 
 "go语言插件
-Plugin 'fatih/vim-go'
+"Plugin 'fatih/vim-go'
 
 "多语言自动补全
 " Plugin 'Valloric/YouCompleteMe'
@@ -491,13 +511,13 @@ Plugin 'flazz/vim-colorschemes'
 " Plugin 'vim-scripts/taglist.vim'
 
 "显示undo列表 即操作历史
-Plugin 'sjl/gundo.vim'
+"Plugin 'sjl/gundo.vim'
 
 "显示文件列表
 Plugin 'scrooloose/nerdtree'
 
 "浏览标签的侧边栏 显示ctags产生的文件 跟taglist差不多,对中文支持好一点
-Plugin 'majutsushi/tagbar'
+"Plugin 'majutsushi/tagbar'
 
 "漂亮的statusline
 Plugin 'vim-airline/vim-airline'
