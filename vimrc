@@ -39,14 +39,15 @@ set fileencodings=utf8,ucs-bom,euc-cn,cp950
 set fillchars=vert:\ ,stl:\ ,stlnc:\ "在被分割的窗口间显示空白，便于阅读
 set formatoptions+=mB
 set foldenable         "开启折叠功能
-set foldlevel=1        "低于该等级的折叠自动打开
-set foldmethod=manual  "手动折叠manual | 格式syntax
+set foldlevel=99       "低于该等级的折叠自动打开
+set foldnestmax=2
+set foldmethod=indent  "手动折叠manual | 格式syntax
 "set guifont=Courier_New:h10:cANSI "设置字体
 set guioptions-=T      "gvim隐藏工具栏
 set guioptions-=m      "gvim隐藏菜单栏
 set helplang=cn        "优先查询中文帮助文档
 set history=100        "输入历史记录数
-set ignorecase         "搜索忽略大小写
+set smartcase          "搜索智能判断大小写
 set incsearch          "边输入边搜索"
 set iskeyword+=.,_,$,@,%,#,- "带有如下符号的单词不折行
 set langmenu=zh_CN.UTF-8 "语言设置
@@ -85,99 +86,92 @@ set wildmenu           "增强输入命令自动补全功能
 "自动命令 au[tocmd]
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " au VimEnter * if !argc() | NERDTree | endif
-au BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+au BufEnter * if (
+            \ winnr("$") == 1 &&
+            \ exists("b:NERDTreeType") &&
+            \ b:NERDTreeType == "primary") | q | endif
 au BufWritePost ~/.vimrc source ~/.vimrc
-" au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+" au BufWritePost *.py call Flake8()
+
+au BufReadPost * if (
+            \ line("'\"") > 1 && 
+            \ line("'\"") <= line("$")) | exe "normal! g`\"" | endif
 au BufWinLeave * mkview
 au BufReadPost * silent loadview
-au BufWritePost *.py call Flake8()
 
-au BufNewFile *.cpp,*.[ch],*.sh,*.rb,*.java,*.py,*.md execute ":call SetTitle()"
 au BufRead,BufNewFile *.txt set filetype=confluencewiki
-au BufRead,BufNewFile *.dot map <F5> :w<CR>:!dot -Tjpg -o %<.jpg % && eog %<.jpg  <CR><CR> && execute "redr!"
+au BufRead,BufNewFile *.dot map <F5> 
+            \ :w<CR>:!dot -Tjpg -o %<.jpg %
+            \ && eog %<.jpg  <CR><CR>
+            \ && execute "redr!"
 au BufRead,BufNewFile *.json set filetype=json
 au BufRead,BufNewFile *.go set filetype=go
 au BufRead,BufNewFile *.js set filetype=javascript
 au BufRead,BufNewFile *.{md,mdown,mkd,mkdn,markdown,mdwn} set filetype=mkd
 
-au FileType php setlocal dict+=~/.vim/dict/php_funclist.dict
-au FileType css setlocal dict+=~/.vim/dict/css.dict
-au FileType c setlocal dict+=~/.vim/dict/c.dict
-au FileType cpp setlocal dict+=~/.vim/dict/cpp.dict
-au FileType scale setlocal dict+=~/.vim/dict/scale.dict
-au FileType javascript setlocal dict+=~/.vim/dict/javascript.dict
-au FileType html setlocal dict+=~/.vim/dict/javascript.dict
-au FileType html setlocal dict+=~/.vim/dict/css.dict
-au FileType javascript setlocal foldmethod=syntax
-au FileType python set omnifunc=pythoncomplete#Complete
-au FileType python set completeopt-=preview
-
 au cursorhold * set nohlsearch
 
-func! SetTitle()
+au BufNewFile *.cpp,*.[ch],*.sh,*.rb,*.java,*.py,*.md
+            \ execute ":call SetCommentHeader()"
+func! SetCommentHeader()
+    let FN = "File: ".expand("%")
+    let AU = "Authors: Hank <hankso1106@gmail.com>"
+    let CT = "Create: ".strftime("%Y-%m-%d %T")
     if &filetype == 'sh'
-        call setline(1, "#!/bin/bash")
-        call append(line("."),   "# File: ".expand("%"))
-        call append(line(".")+1, "# Author: Hankso")
-        call append(line(".")+2, "# Webpage: http://github.com/hankso")
-        call append(line(".")+3, "# Time: ".strftime("%c"))
-        call append(line(".")+4, "")
+        call append(0, ["#!/bin/bash", "# ".FN, "# ".AU, "# ".CT, ""])
     elseif &filetype == 'python'
-        call setline(1, "#!/usr/bin/env python")
-        call append(line("."),   "# coding=utf-8")
-        call append(line(".")+1, "#")
-        call append(line(".")+2, "# File: ".expand("%"))
-        call append(line(".")+3, "# Author: Hankso")
-        call append(line(".")+4, "# Webpage: https://github.com/hankso")
-        call append(line(".")+5, "# Time: ".strftime("%c"))
-        call append(line(".")+6, "")
-        call append(line(".")+7, "'''__doc__'''")
-        call append(line(".")+8, "")
+        " PEP394 add shebang, PEP263 add encoding
+        call append(0, [
+            \ "#!/usr/bin/env python3",
+            \ "# coding=utf-8",
+            \ "#", "# ".FN, "# ".AU, "# ".CT, "",
+            \ "'''__doc__'''"])
     elseif &filetype == 'ruby'
-        call setline(1, "#!/usr/bin/env ruby")
-        call append(line("."), "# encoding: utf-8")
-        call append(line(".")+1, "")
-    elseif &filetype == 'mkd'
-        call setline(1, "<head><meta charset=\"UTF-8\"></head>")
+        call append(0, [
+            \ "#!/usr/bin/env ruby",
+            \ "# encoding: utf-8",
+            \ "#", "# ".FN, "# ".AU, "# ".CT, ""])
+    " elseif &filetype == 'mkd'
+    "     call setline(1, "<head><meta charset=\"UTF-8\"></head>")
     elseif &filetype == 'java'
-        call setline(1, "//")
-        call append(line("."),   "// File: ".expand("%"))
-        call append(line(".")+1, "// Author: Hankso")
-        call append(line(".")+2, "// Webpage: http://github.com/hankso")
-        call append(line(".")+3, "// Time: ".strftime("%c"))
-        call append(line(".")+4, "//")
-        call append(line(".")+5, "")
-        call append(line(".")+6, "public class ".expand("%:r"))
-        call append(line(".")+7, "")
+        call append(0, ["/* ", " * ".FN, " * ".AU, " * ".CT, " */", ""])
+        call append(line("."), ["public class ".expand("%:r"), ""])
     elseif &filetype == 'c' || &filetype == 'cpp'
-        call setline(1, "/*************************************************************************")
-        call append(line("."),   "File: ".expand("%"))
-        call append(line(".")+1, "Author: Hankso")
-        call append(line(".")+2, "Webpage: http://github.com/hankso")
-        call append(line(".")+3, "Time: ".strftime("%c"))
-        call append(line(".")+4, "************************************************************************/")
-        call append(line(".")+5, "#include <stdio.h>")
-        call append(line(".")+6, "")
+        call append(0, ["/* ", " * ".FN, " * ".AU, " * ".CT, " */", ""])
+        call append(line("."), ["#include <stdio.h>", ""])
     endif
 endfunc
 
-" 打开二进制文件比如照片,可执行文件bin等时使用16进制显示
-augroup Binary
+augroup Filetype
     au!
-    au BufReadPre  *.bin let &bin=1
-    au BufReadPost *.bin if &bin | %!xxd
-    au BufReadPost *.bin set ft=xxd | endif
-    au BufWritePre *.bin if &bin | %!xxd -r | endif
-    au BufWritePost *.bin if &bin | %!xxd
-    au BufWritePost *.bin set nomod | endif
+    au FileType c          setlocal dict+=~/.vim/dict/c.dict
+    au FileType cpp        setlocal dict+=~/.vim/dict/cpp.dict
+    au FileType php        setlocal dict+=~/.vim/dict/php_funclist.dict
+    au FileType css        setlocal dict+=~/.vim/dict/css.dict
+    au FileType html       setlocal dict+=~/.vim/dict/javascript.dict
+    au FileType html       setlocal dict+=~/.vim/dict/css.dict
+    au FileType scale      setlocal dict+=~/.vim/dict/scale.dict
+    au FileType python     set completeopt-=preview
+    au FileType javascript setlocal dict+=~/.vim/dict/javascript.dict
+    au FileType javascript setlocal foldmethod=syntax
 augroup END
 
 augroup Json
     au!
-    au Filetype json set autoindent
-    au Filetype json set formatoptions=tcq2l
-    au Filetype json set textwidth=78 shiftwidth=2
-    au Filetype json set foldmethod=syntax
+    au FileType json set autoindent
+    au FileType json set formatoptions=tcq2l
+    au FileType json set textwidth=78 shiftwidth=2
+    au FileType json set foldmethod=syntax
+augroup END
+
+augroup Binary
+    au!
+    au BufReadPre   *.bin let &bin=1
+    au BufReadPost  *.bin if &bin | %!xxd
+    au BufReadPost  *.bin set ft=xxd | endif
+    au BufWritePre  *.bin if &bin | %!xxd -r | endif
+    au BufWritePost *.bin if &bin | %!xxd
+    au BufWritePost *.bin set nomod | endif
 augroup END
 
 augroup Python
@@ -458,11 +452,14 @@ Plugin 'godlygeek/tabular'
 " Plugin 'jedi-vim'
 
 "Python代码PEP8格式检查
-Plugin 'nvie/vim-flake8'
+" Plugin 'nvie/vim-flake8'
 
 "一个插件满足python所有需求 缩进高亮补全 ...
 "Make Vim a Python IDE
 Plugin 'python-mode/python-mode'
+
+"Python代码折叠
+Plugin 'tmhedberg/SimpylFold'
 
 " Plugin 'vim-syntastic/syntastic'
 
@@ -474,6 +471,7 @@ Plugin 'fatih/vim-go'
 
 "多语言自动补全
 " Plugin 'Valloric/YouCompleteMe'
+" Plugin 'zxqfl/tabnine-vim'  " 使用AI训练，巨耗资源
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -520,81 +518,104 @@ filetype plugin indent on
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "设置插件的一些功能
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
- let g:tagbar_ctags_bin = 'ctags'   "ctags程序的路径
- let g:tagbar_width = 30            "窗口宽度的设置
+let g:tagbar_ctags_bin = 'ctags'   "ctags程序的路径
+let g:tagbar_width = 30            "窗口宽度的设置
 
- let NERDTreeWinSize = 26
- "let g:NERDTreeStatusline =
- let NERDTreeWinPos = "left"
+let NERDTreeWinSize = 26
+"let g:NERDTreeStatusline =
+let NERDTreeWinPos = "left"
 
- let g:NERDSpaceDelims = 1          "注释符号后加空格
- let g:NERDCompactSexyComs = 1      "多行注释时结构更加紧凑
- let g:NERDDefaultAlign = 'left'    "多行注释在同一列添加注释符号
- "let g:NERDCustomDelimiters = {'c':{'left':'/**','right': '*/'}} "可以自己定义注释符号
- let g:NERDCommentEmptyLines = 1    "允许注释空行,默认否
- let g:NERDTrimTrailingWhitespace = 1 "取消注释时删除不必要的空格
+let g:NERDSpaceDelims = 1          "注释符号后加空格
+let g:NERDCompactSexyComs = 1      "多行注释时结构更加紧凑
+let g:NERDDefaultAlign = 'left'    "多行注释在同一列添加注释符号
+" let g:NERDCustomDelimiters = {'c':{'left':'/**','right': '*/'}} "可以自己定义注释符号
+let g:NERDCommentEmptyLines = 1    "允许注释空行,默认否
+let g:NERDTrimTrailingWhitespace = 1 "取消注释时删除不必要的空格
 
- let g:vim_json_syntax_conceal = 0
+let g:vim_json_syntax_conceal = 0
 
- let g:indentLine_char = '┊'
- " let g:indentLine_char = '|'
+let g:indentLine_char = '┊'
+" let g:indentLine_char = '|'
 
- let g:vim_markdown_frontmatter = 1
- let g:vim_markdown_toml_frontmatter = 1
- let g:vim_markdown_json_frontmatter = 1
- let g:vim_markdown_no_extensions_in_markdown = 1
+let g:vim_markdown_frontmatter = 1
+let g:vim_markdown_toml_frontmatter = 1
+let g:vim_markdown_json_frontmatter = 1
+let g:vim_markdown_no_extensions_in_markdown = 1
 
- let g:javascript_plugin_jsdoc = 1
+let g:javascript_plugin_jsdoc = 1
 
- let g:airline_powerline_fonts = 1
- let g:airline_theme = 'bubblegum'
- let g:airline#extensions#whitespace#enabled = 1
- let g:airline#extensions#tabline#enabled = 1
- let g:airline#extensions#tabline#buffer_min_count = 1
- let g:airline#extensions#tabline#buffer_nr_show = 1
- let g:airline#extensions#tabline#buffer_nr_format = '[%s]'
- let g:airline#extensions#tabline#buffers_label = '[b]'
- let g:airline#extensions#tabline#tabs_label = '[t]'
- let g:airline#extensions#tabline#left_sep = ''
- let g:airline#extensions#tabline#right_sep = ''
- let g:airline#extensions#tagbar#enabled = 1
- let g:airline#extensions#fugitiveline#enabled = 1
- let g:airline_section_b = '%-0.10{getcwd()}'
- let g:airline_section_z = '%3p%%%#__accent_bold#%4l,%3v %{g:airline_symbols.maxlinenr}%:%L%#__restore__#'
- let g:airline_section_warning = ''
- if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
- endif
- " let g:airline_left_sep = '»'
- let g:airline_left_sep = '▶'
- " let g:airline_left_sep = ''
- " let g:airline_left_alt_sep = ''
- let g:airline_left_alt_sep = '>'
- " let g:airline_right_sep = '«'
- let g:airline_right_sep = '◀'
- " let g:airline_right_sep = ''
- " let g:airline_right_alt_sep = ''
- let g:airline_right_alt_sep = '<'
- " let g:airline_symbols.crypt = '🔒'
- let g:airline_symbols.readonly = '🔒'
- " let g:airline_symbols.readonly = ''
- " let g:airline_symbols.linenr = '☰'
- let g:airline_symbols.linenr = '␊'
- " let g:airline_symbols.linenr = '␤'
- " let g:airline_symbols.linenr = '¶'
- let g:airline_symbols.maxlinenr = '㏑'
- " let g:airline_symbols.maxlinenr = ' ␤'
- " let g:airline_symbols.maxlinenr = ''
- let g:airline_symbols.branch = '⎇'
- " let g:airline_symbols.branch = ''
- let g:airline_symbols.paste = 'ρ'
- " let g:airline_symbols.paste = 'Þ'
- " let g:airline_symbols.paste = '∥'
- let g:airline_symbols.spell = 'Ꞩ'
- let g:airline_symbols.notexists = '∄'
- let g:airline_symbols.whitespace = 'Ξ'
+let g:airline_powerline_fonts = 1
+let g:airline_theme = 'bubblegum'
+let g:airline#extensions#whitespace#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_min_count = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline#extensions#tabline#buffer_nr_format = '[%s]'
+let g:airline#extensions#tabline#buffers_label = '[b]'
+let g:airline#extensions#tabline#tabs_label = '[t]'
+let g:airline#extensions#tabline#left_sep = ''
+let g:airline#extensions#tabline#right_sep = ''
+let g:airline#extensions#tagbar#enabled = 1
+let g:airline#extensions#fugitiveline#enabled = 1
+let g:airline_section_b = '%-0.10{getcwd()}'
+let g:airline_section_z = '%3p%%%#__accent_bold#%4l,%3v %{g:airline_symbols.maxlinenr}%:%L%#__restore__#'
+let g:airline_section_warning = ''
+if !exists('g:airline_symbols')
+   let g:airline_symbols = {}
+endif
+" let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+" let g:airline_left_sep = ''
+" let g:airline_left_alt_sep = ''
+let g:airline_left_alt_sep = '>'
+" let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+" let g:airline_right_sep = ''
+" let g:airline_right_alt_sep = ''
+let g:airline_right_alt_sep = '<'
+" let g:airline_symbols.crypt = '🔒'
+let g:airline_symbols.readonly = '🔒'
+" let g:airline_symbols.readonly = ''
+" let g:airline_symbols.linenr = '☰'
+let g:airline_symbols.linenr = '␊'
+" let g:airline_symbols.linenr = '␤'
+" let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.maxlinenr = '㏑'
+" let g:airline_symbols.maxlinenr = ' ␤'
+" let g:airline_symbols.maxlinenr = ''
+let g:airline_symbols.branch = '⎇'
+" let g:airline_symbols.branch = ''
+let g:airline_symbols.paste = 'ρ'
+" let g:airline_symbols.paste = 'Þ'
+" let g:airline_symbols.paste = '∥'
+let g:airline_symbols.spell = 'Ꞩ'
+let g:airline_symbols.notexists = '∄'
+let g:airline_symbols.whitespace = 'Ξ'
 
- let g:go_version_warning = 0
+let g:go_version_warning = 0
+
+" let g:SimpylFold_docstring_preview = 1
+
+let g:pymode = 1
+let g:pymode_warnings = 1
+" let g:pymode_python = 'python'
+let g:pymode_python = 'python3'
+let g:pymode_folding = 0
+let g:pymode_doc_bind = 'K'
+let g:pymode_run_bind = '<leader>r'
+let g:pymode_lint_on_fly = 0
+let g:pymode_lint_message = 1
+let g:pymode_lint_checkers = ['pyflakes', 'pep8']
+let g:pymode_lint_ignore = ["E221", "E251", "E402"]
+let g:pymode_lint_sort = ['E', 'C', 'I']
+let g:pymode_rope = 1
+let g:pymode_rope_completion = 1
+let g:pymode_rope_complete_on_dot = 1
+let g:pymode_rope_completion_bind = '<C-Space>'
+let g:pymode_rope_show_doc_bind = '<leader>d'
+let g:pymode_rope_autoimport_modules = ['os', 'sys', 'types', 'shutil', 'datetime']
+let g:pymode_rope_goto_definition_bind = 'gs'
+let g:pymode_syntax_print_as_function = 1
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

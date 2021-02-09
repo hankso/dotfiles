@@ -1,19 +1,16 @@
 # This is Git's per-user configuration file.
 [user]
 # Please adapt and uncomment the following lines:
-	name = xxx
-	email = xxx
-
+    name = hankso
+    email = hankso1106@gmail.com
 [push]
-	default = simple
-
+    default = simple
+[color]
+    ui = on
 [alias]
-	st = status
-
+    st = status
     ch = checkout
-	
     lg = log --color --all --decorate --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-    
     pack = "!\
         mkdir -p dist && \
         PNAME=`basename ${PWD}` && \

@@ -83,21 +83,6 @@ fi
 # colored GCC warnings and errors
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
-# some more ls aliases
-alias ll='ls -alF'
-alias lh='ls -alh'
-alias la='ls -A'
-alias l='ls -lh'
-alias tree='tree -ACh'
-
-# memory usage
-alias free='free -lht'
-
-# some df aliases
-alias df='df -lhT'
-
-# some du aliases
-alias du='du -sch '
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -192,4 +177,23 @@ xterm*|rxvt*)
     ;;
 esac
 
-alias ipy="ipython"
+# Load RVM into a shell session *as a function*
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+# added by travis gem
+[ -f "$HOME/.travis/travis.sh" ] && source "$HOME/.travis/travis.sh"
+
+# user defined
+export UBUNTU_MENUPROXY=0
+export SC2PATH=$HOME/programs/StarCraftII
+export GOPATH=$HOME/Documents/go
+export NODE_PATH=$HOME/programs/node-linux-x64/lib/node_modules
+
+# Espressif Development Framework
+export ESP_PATH=$HOME/programs/Espressif
+export IDF_PATH=$ESP_PATH/esp-idf  # IoT
+export ADF_PATH=$ESP_PATH/esp-adf  # Audio
+export MDF_PATH=$ESP_PATH/esp-mdf  # Mesh
+
+# export EMBCI_PATH=$HOME/Git/EmBCI
+# export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+
